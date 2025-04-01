@@ -100,7 +100,7 @@ export function setupAuth(app: Express) {
         name,
         email,
         points: 0,
-        streak: 0,
+        currentStreak: 0,
       });
 
       // Remove password from response

@@ -20,7 +20,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       name: "Alex Johnson",
       email: "alex@example.com",
       points: 0,
-      streak: 0
+      currentStreak: 0
     });
   }
 
@@ -357,6 +357,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.id;
       const habits = await storage.getHabits(userId);
       
+      if (!habits || habits.length === 0) {
+        return res.json([]); // Return empty array if no habits found
+      }
+      
       const upcomingDays = 5; // Next 5 days
       const upcoming = [];
       
@@ -383,6 +387,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(upcoming);
     } catch (error) {
+      console.error('Error fetching upcoming habits:', error);
       res.status(500).json({ message: "Failed to fetch upcoming habits" });
     }
   });
