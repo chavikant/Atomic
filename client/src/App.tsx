@@ -12,6 +12,7 @@ import AuthPage from "@/pages/auth-page";
 import MainLayout from "@/layouts/main-layout";
 import { useState, useEffect } from "react";
 import { AuthProvider } from "@/contexts/auth-context";
+import { ThemeProvider } from "@/contexts/theme-context";
 import { ProtectedRoute } from "@/components/protected-route";
 
 // Theme setup
@@ -95,10 +96,12 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router />
-        <Toaster />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Router />
+          <Toaster />
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

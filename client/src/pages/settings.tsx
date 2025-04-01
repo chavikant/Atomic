@@ -21,10 +21,23 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/auth-context";
+import { useTheme } from "@/contexts/theme-context";
+import { cn } from "@/lib/utils";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("account");
   const { user, logout } = useAuth();
+  const { 
+    mode, 
+    color, 
+    reduceAnimations, 
+    compactMode, 
+    setMode, 
+    setColor, 
+    setReduceAnimations, 
+    setCompactMode, 
+    resetToDefault 
+  } = useTheme();
 
   // Default user data if no data
   const userData = { 
@@ -35,9 +48,9 @@ export default function Settings() {
 
   return (
     <>
-      <header className="bg-white p-4 border-b border-gray-200 sm:px-6">
+      <header className="bg-background p-4 border-b border-border sm:px-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-800">Settings</h2>
+          <h2 className="text-2xl font-bold">Settings</h2>
         </div>
       </header>
 
@@ -251,19 +264,37 @@ export default function Settings() {
                   <div>
                     <h3 className="font-medium mb-3">Theme</h3>
                     <div className="grid grid-cols-3 gap-3">
-                      <div className="border border-primary rounded-lg p-3 cursor-pointer bg-white">
+                      <div 
+                        className={cn(
+                          "border rounded-lg p-3 cursor-pointer transition-all", 
+                          mode === "light" ? "border-primary ring-2 ring-primary/20" : "hover:border-primary"
+                        )}
+                        onClick={() => setMode("light")}
+                      >
                         <div className="h-16 bg-gray-50 rounded-md mb-2 flex items-center justify-center text-gray-800">
                           Light
                         </div>
                         <p className="text-xs text-center font-medium">Light Mode</p>
                       </div>
-                      <div className="border rounded-lg p-3 cursor-pointer hover:border-primary">
+                      <div 
+                        className={cn(
+                          "border rounded-lg p-3 cursor-pointer transition-all", 
+                          mode === "dark" ? "border-primary ring-2 ring-primary/20" : "hover:border-primary"
+                        )}
+                        onClick={() => setMode("dark")}
+                      >
                         <div className="h-16 bg-gray-800 rounded-md mb-2 flex items-center justify-center text-gray-200">
                           Dark
                         </div>
                         <p className="text-xs text-center font-medium">Dark Mode</p>
                       </div>
-                      <div className="border rounded-lg p-3 cursor-pointer hover:border-primary">
+                      <div 
+                        className={cn(
+                          "border rounded-lg p-3 cursor-pointer transition-all", 
+                          mode === "system" ? "border-primary ring-2 ring-primary/20" : "hover:border-primary"
+                        )}
+                        onClick={() => setMode("system")}
+                      >
                         <div className="h-16 bg-gradient-to-br from-gray-50 to-gray-800 rounded-md mb-2 flex items-center justify-center text-gray-600">
                           Auto
                         </div>
@@ -277,24 +308,39 @@ export default function Settings() {
                   <div>
                     <h3 className="font-medium mb-3">Color Scheme</h3>
                     <div className="grid grid-cols-5 gap-3">
-                      <div className="cursor-pointer">
-                        <div className="h-10 w-10 rounded-full border-2 border-primary bg-indigo-600 mx-auto"></div>
+                      <div className="cursor-pointer" onClick={() => setColor("indigo")}>
+                        <div className={cn(
+                          "h-10 w-10 rounded-full bg-indigo-600 mx-auto transition-all",
+                          color === "indigo" ? "ring-4 ring-indigo-300 border-2 border-indigo-600" : ""
+                        )}></div>
                         <p className="text-xs text-center mt-1">Indigo</p>
                       </div>
-                      <div className="cursor-pointer">
-                        <div className="h-10 w-10 rounded-full bg-blue-600 mx-auto"></div>
+                      <div className="cursor-pointer" onClick={() => setColor("blue")}>
+                        <div className={cn(
+                          "h-10 w-10 rounded-full bg-blue-600 mx-auto transition-all",
+                          color === "blue" ? "ring-4 ring-blue-300 border-2 border-blue-600" : ""
+                        )}></div>
                         <p className="text-xs text-center mt-1">Blue</p>
                       </div>
-                      <div className="cursor-pointer">
-                        <div className="h-10 w-10 rounded-full bg-green-600 mx-auto"></div>
+                      <div className="cursor-pointer" onClick={() => setColor("green")}>
+                        <div className={cn(
+                          "h-10 w-10 rounded-full bg-green-600 mx-auto transition-all",
+                          color === "green" ? "ring-4 ring-green-300 border-2 border-green-600" : ""
+                        )}></div>
                         <p className="text-xs text-center mt-1">Green</p>
                       </div>
-                      <div className="cursor-pointer">
-                        <div className="h-10 w-10 rounded-full bg-amber-600 mx-auto"></div>
+                      <div className="cursor-pointer" onClick={() => setColor("amber")}>
+                        <div className={cn(
+                          "h-10 w-10 rounded-full bg-amber-600 mx-auto transition-all",
+                          color === "amber" ? "ring-4 ring-amber-300 border-2 border-amber-600" : ""
+                        )}></div>
                         <p className="text-xs text-center mt-1">Amber</p>
                       </div>
-                      <div className="cursor-pointer">
-                        <div className="h-10 w-10 rounded-full bg-red-600 mx-auto"></div>
+                      <div className="cursor-pointer" onClick={() => setColor("red")}>
+                        <div className={cn(
+                          "h-10 w-10 rounded-full bg-red-600 mx-auto transition-all",
+                          color === "red" ? "ring-4 ring-red-300 border-2 border-red-600" : ""
+                        )}></div>
                         <p className="text-xs text-center mt-1">Red</p>
                       </div>
                     </div>
@@ -307,7 +353,10 @@ export default function Settings() {
                       <h3 className="font-medium">Reduce Animations</h3>
                       <p className="text-sm text-gray-500">For improved performance and reduced motion</p>
                     </div>
-                    <Switch />
+                    <Switch 
+                      checked={reduceAnimations}
+                      onCheckedChange={setReduceAnimations}
+                    />
                   </div>
 
                   <Separator />
@@ -317,11 +366,14 @@ export default function Settings() {
                       <h3 className="font-medium">Compact Mode</h3>
                       <p className="text-sm text-gray-500">Display more content with reduced spacing</p>
                     </div>
-                    <Switch />
+                    <Switch 
+                      checked={compactMode}
+                      onCheckedChange={setCompactMode}
+                    />
                   </div>
 
                   <div className="pt-4 flex justify-end gap-2">
-                    <Button variant="outline">Reset to Default</Button>
+                    <Button variant="outline" onClick={resetToDefault}>Reset to Default</Button>
                     <Button>Save Changes</Button>
                   </div>
                 </div>
