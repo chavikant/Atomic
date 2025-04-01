@@ -1,4 +1,4 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { 
@@ -8,6 +8,7 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 import { format } from "date-fns";
+import { setupAuth } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize default user if none exists
@@ -15,25 +16,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   if (!defaultUser) {
     await storage.createUser({
       username: "demo",
-      password: "password", // In a real app, this would be hashed
+      password: "demo123", // This will be hashed by the auth system when registered properly
       name: "Alex Johnson",
-      email: "alex@example.com"
+      email: "alex@example.com",
+      points: 0,
+      streak: 0
     });
   }
 
+  // Set up authentication
+  const { isAuthenticated } = setupAuth(app);
+
   // User routes
-  app.get('/api/users/me', async (req: Request, res: Response) => {
+  app.get('/api/users/me', isAuthenticated, async (req: Request, res: Response) => {
     try {
-      // In a real app, we'd use the authenticated user ID
-      // For demo, we'll use the default user
-      const user = await storage.getUserByUsername("demo");
-      
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
       }
       
       // Don't send password in response
-      const { password, ...userWithoutPassword } = user;
+      const { password, ...userWithoutPassword } = req.user;
       res.json(userWithoutPassword);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch user" });
@@ -41,9 +43,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Habit routes
-  app.post('/api/habits', async (req: Request, res: Response) => {
+  app.post('/api/habits', isAuthenticated, async (req: Request, res: Response) => {
     try {
-      const validatedData = insertHabitSchema.parse(req.body);
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
+      const habitData = { ...req.body, userId };
+      const validatedData = insertHabitSchema.parse(habitData);
       const habit = await storage.createHabit(validatedData);
       res.status(201).json(habit);
     } catch (error) {
@@ -54,11 +62,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/habits', async (req: Request, res: Response) => {
+  app.get('/api/habits', isAuthenticated, async (req: Request, res: Response) => {
     try {
-      // In a real app, we'd use the authenticated user ID
-      // For demo, we'll use user ID 1
-      const userId = 1;
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const habits = await storage.getHabits(userId);
       res.json(habits);
     } catch (error) {
@@ -66,10 +76,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/habits/today', async (req: Request, res: Response) => {
+  app.get('/api/habits/today', isAuthenticated, async (req: Request, res: Response) => {
     try {
-      // In a real app, we'd use the authenticated user ID
-      const userId = 1;
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const today = new Date();
       
       // Get habits for today
@@ -94,13 +107,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/habits/:id', async (req: Request, res: Response) => {
+  app.get('/api/habits/:id', isAuthenticated, async (req: Request, res: Response) => {
     try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const habitId = parseInt(req.params.id);
       const habit = await storage.getHabit(habitId);
       
       if (!habit) {
         return res.status(404).json({ message: "Habit not found" });
+      }
+      
+      // Check if habit belongs to user
+      if (habit.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
       }
       
       res.json(habit);
@@ -109,13 +132,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch('/api/habits/:id', async (req: Request, res: Response) => {
+  app.patch('/api/habits/:id', isAuthenticated, async (req: Request, res: Response) => {
     try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const habitId = parseInt(req.params.id);
       const habit = await storage.getHabit(habitId);
       
       if (!habit) {
         return res.status(404).json({ message: "Habit not found" });
+      }
+      
+      // Check if habit belongs to user
+      if (habit.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
       }
       
       const updatedHabit = await storage.updateHabit(habitId, req.body);
@@ -125,9 +158,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/habits/:id', async (req: Request, res: Response) => {
+  app.delete('/api/habits/:id', isAuthenticated, async (req: Request, res: Response) => {
     try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const habitId = parseInt(req.params.id);
+      const habit = await storage.getHabit(habitId);
+      
+      if (!habit) {
+        return res.status(404).json({ message: "Habit not found" });
+      }
+      
+      // Check if habit belongs to user
+      if (habit.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
       const deleted = await storage.deleteHabit(habitId);
       
       if (!deleted) {
@@ -141,8 +190,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Habit Logs
-  app.post('/api/habits/:id/complete', async (req: Request, res: Response) => {
+  app.post('/api/habits/:id/complete', isAuthenticated, async (req: Request, res: Response) => {
     try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const habitId = parseInt(req.params.id);
       const { progress, date } = req.body;
       
@@ -151,8 +205,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Progress is required" });
       }
       
-      // In a real app, we'd use the authenticated user ID
-      const userId = 1;
+      // Check if habit belongs to user
+      const habit = await storage.getHabit(habitId);
+      if (!habit) {
+        return res.status(404).json({ message: "Habit not found" });
+      }
+      
+      if (habit.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
       
       // Use provided date or default to today
       const logDate = date ? new Date(date) : new Date();
@@ -164,9 +225,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/habits/:id/logs', async (req: Request, res: Response) => {
+  app.get('/api/habits/:id/logs', isAuthenticated, async (req: Request, res: Response) => {
     try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const habitId = parseInt(req.params.id);
+      
+      // Check if habit belongs to user
+      const habit = await storage.getHabit(habitId);
+      if (!habit) {
+        return res.status(404).json({ message: "Habit not found" });
+      }
+      
+      if (habit.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
       const startDate = req.query.startDate ? new Date(req.query.startDate as string) : new Date();
       const endDate = req.query.endDate ? new Date(req.query.endDate as string) : new Date();
       
@@ -183,10 +260,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Achievement routes
-  app.get('/api/achievements', async (req: Request, res: Response) => {
+  app.get('/api/achievements', isAuthenticated, async (req: Request, res: Response) => {
     try {
-      // In a real app, we'd use the authenticated user ID
-      const userId = 1;
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const achievements = await storage.getUserAchievements(userId);
       res.json(achievements);
     } catch (error) {
@@ -195,10 +275,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Analytics routes
-  app.get('/api/analytics/weekly', async (req: Request, res: Response) => {
+  app.get('/api/analytics/weekly', isAuthenticated, async (req: Request, res: Response) => {
     try {
-      // In a real app, we'd use the authenticated user ID
-      const userId = 1;
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const today = new Date();
       const startDate = new Date();
       startDate.setDate(today.getDate() - 7);
@@ -265,10 +348,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Upcoming habits (for next few days)
-  app.get('/api/habits/upcoming', async (req: Request, res: Response) => {
+  app.get('/api/habits/upcoming', isAuthenticated, async (req: Request, res: Response) => {
     try {
-      // In a real app, we'd use the authenticated user ID
-      const userId = 1;
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
       const habits = await storage.getHabits(userId);
       
       const upcomingDays = 5; // Next 5 days

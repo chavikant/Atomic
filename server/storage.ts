@@ -5,6 +5,10 @@ import {
   achievements, type Achievement, type InsertAchievement,
   userAchievements, type UserAchievement, type InsertUserAchievement
 } from "@shared/schema";
+import session from "express-session";
+import createMemoryStore from "memorystore";
+
+const MemoryStore = createMemoryStore(session);
 
 export interface IStorage {
   // User methods
@@ -35,6 +39,9 @@ export interface IStorage {
   getUserAchievements(userId: number): Promise<(Achievement & { unlocked: boolean })[]>;
   unlockAchievement(userId: number, achievementId: number): Promise<UserAchievement>;
   checkAndUnlockAchievements(userId: number): Promise<UserAchievement[]>;
+  
+  // Session store
+  sessionStore: session.Store;
 }
 
 export class MemStorage implements IStorage {
@@ -44,6 +51,7 @@ export class MemStorage implements IStorage {
   private achievements: Map<number, Achievement>;
   private userAchievements: Map<string, UserAchievement>;
   private currentId: { [key: string]: number };
+  public sessionStore: session.Store;
 
   constructor() {
     this.users = new Map();
@@ -58,6 +66,11 @@ export class MemStorage implements IStorage {
       achievements: 1,
       userAchievements: 1
     };
+    
+    // Initialize session store
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    });
 
     // Seed default achievements
     this.seedAchievements();

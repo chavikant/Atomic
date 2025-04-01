@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Leaderboard } from "@/components/community/leaderboard";
 
 export default function Community() {
   // This page is a placeholder/mockup for the community feature
@@ -137,68 +138,8 @@ export default function Community() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Leaderboard</CardTitle>
-                <CardDescription>
-                  Top performers this week
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-amber-100 w-8 h-8 rounded-full flex items-center justify-center text-amber-800 font-bold">
-                        1
-                      </div>
-                      <div>
-                        <p className="font-medium">Sarah J.</p>
-                        <p className="text-xs text-gray-500">7 day streak</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center text-green-600 text-sm">
-                      <TrendingUp className="h-4 w-4 mr-1" />
-                      <span>245 pts</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center text-gray-800 font-bold">
-                        2
-                      </div>
-                      <div>
-                        <p className="font-medium">Michael T.</p>
-                        <p className="text-xs text-gray-500">5 day streak</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center text-green-600 text-sm">
-                      <TrendingUp className="h-4 w-4 mr-1" />
-                      <span>210 pts</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-amber-50 w-8 h-8 rounded-full flex items-center justify-center text-amber-700 font-bold">
-                        3
-                      </div>
-                      <div>
-                        <p className="font-medium">Alex J.</p>
-                        <p className="text-xs text-gray-500">4 day streak</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center text-green-600 text-sm">
-                      <TrendingUp className="h-4 w-4 mr-1" />
-                      <span>180 pts</span>
-                    </div>
-                  </div>
-                </div>
-                <Button variant="outline" className="w-full mt-4">
-                  View Full Leaderboard
-                </Button>
-              </CardContent>
-            </Card>
+            {/* Replace the old leaderboard with our new dynamic component */}
+            <Leaderboard />
 
             <Card>
               <CardHeader>

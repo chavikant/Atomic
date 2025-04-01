@@ -8,24 +8,36 @@ import Habits from "@/pages/habits";
 import Analytics from "@/pages/analytics";
 import Community from "@/pages/community";
 import Settings from "@/pages/settings";
+import AuthPage from "@/pages/auth-page";
 import MainLayout from "@/layouts/main-layout";
 import { useState, useEffect } from "react";
+import { AuthProvider } from "@/contexts/auth-context";
+import { ProtectedRoute } from "@/components/protected-route";
 
 // Theme setup
 import "./index.css";
 
 function Router() {
   return (
-    <MainLayout>
-      <Switch>
-        <Route path="/" component={Dashboard} />
-        <Route path="/habits" component={Habits} />
-        <Route path="/analytics" component={Analytics} />
-        <Route path="/community" component={Community} />
-        <Route path="/settings" component={Settings} />
-        <Route component={NotFound} />
-      </Switch>
-    </MainLayout>
+    <Switch>
+      <Route path="/auth">
+        <AuthPage />
+      </Route>
+      <Route path="/">
+        <ProtectedRoute>
+          <MainLayout>
+            <Switch>
+              <Route path="/" component={Dashboard} />
+              <Route path="/habits" component={Habits} />
+              <Route path="/analytics" component={Analytics} />
+              <Route path="/community" component={Community} />
+              <Route path="/settings" component={Settings} />
+              <Route component={NotFound} />
+            </Switch>
+          </MainLayout>
+        </ProtectedRoute>
+      </Route>
+    </Switch>
   );
 }
 
@@ -55,8 +67,10 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
+      <AuthProvider>
+        <Router />
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

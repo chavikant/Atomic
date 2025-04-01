@@ -18,6 +18,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
   password: true,
   name: true,
   email: true,
+  points: true,
+  currentStreak: true,
 });
 
 // Habit schema
