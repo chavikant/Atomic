@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useAuth } from "@/contexts/auth-context";
 import { Sidebar } from "@/components/ui/sidebar";
 import { MobileNavbar } from "@/components/ui/mobile-navbar";
 import { HabitForm } from "@/components/habits/habit-form";
@@ -10,17 +10,14 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const [habitFormOpen, setHabitFormOpen] = useState(false);
+  const { user, isLoading } = useAuth();
   
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['/api/users/me'],
-  });
-
   // Default user data if not loading but no data
-  const userData = user || { 
-    name: "Alex Johnson", 
-    email: "alex@example.com", 
-    currentStreak: 0, 
-    points: 0
+  const userData = { 
+    name: user?.name || "Guest User", 
+    email: user?.email || "guest@example.com",
+    currentStreak: user?.currentStreak || 0,
+    points: user?.points || 0
   };
 
   const handleCreateHabit = () => {

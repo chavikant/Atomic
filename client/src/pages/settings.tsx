@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { 
   Settings as SettingsIcon, 
   User, 
@@ -21,19 +20,17 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("account");
-  
-  const { data: user } = useQuery({
-    queryKey: ['/api/users/me'],
-  });
+  const { user, logout } = useAuth();
 
   // Default user data if no data
-  const userData = user || { 
-    name: "Alex Johnson", 
-    email: "alex@example.com", 
-    username: "alexj"
+  const userData = { 
+    name: user?.name || "Guest User", 
+    email: user?.email || "guest@example.com", 
+    username: user?.username || "guest"
   };
 
   return (
@@ -343,7 +340,11 @@ export default function Settings() {
                 <h3 className="font-medium">Sign Out of Your Account</h3>
                 <p className="text-sm text-gray-500">You can sign back in at any time</p>
               </div>
-              <Button variant="destructive" className="flex items-center gap-2">
+              <Button 
+                variant="destructive" 
+                className="flex items-center gap-2"
+                onClick={() => logout()}
+              >
                 <LogOut className="h-4 w-4" /> 
                 Sign Out
               </Button>

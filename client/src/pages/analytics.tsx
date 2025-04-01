@@ -20,24 +20,26 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ProgressChart } from "@/components/dashboard/progress-chart";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Analytics() {
   const [period, setPeriod] = useState<'week' | 'month' | 'year'>('week');
+  const { user } = useAuth();
   
-  const { data: habits } = useQuery({
+  const { data: habits = [] } = useQuery({
     queryKey: ['/api/habits'],
-  });
-  
-  const { data: user } = useQuery({
-    queryKey: ['/api/users/me'],
   });
 
   // Calculate statistics (simplified for demo)
   const stats = {
-    completion: habits ? Math.round((habits.filter((h: any) => h.currentStreak > 0).length / habits.length) * 100) : 0,
+    completion: Array.isArray(habits) && habits.length > 0 
+      ? Math.round((habits.filter((h: any) => h.currentStreak > 0).length / habits.length) * 100) 
+      : 0,
     totalStreak: user?.currentStreak || 0,
     totalPoints: user?.points || 0,
-    consistency: habits ? Math.round((habits.reduce((acc: number, h: any) => acc + h.currentStreak, 0) / habits.length)) : 0,
+    consistency: Array.isArray(habits) && habits.length > 0
+      ? Math.round((habits.reduce((acc: number, h: any) => acc + h.currentStreak, 0) / habits.length)) 
+      : 0,
     improvement: '+12%', // Placeholder for demo
   };
 
@@ -148,7 +150,7 @@ export default function Analytics() {
           <h3 className="text-lg font-semibold mb-4">Habit Performance</h3>
           
           <div className="space-y-4">
-            {habits?.map((habit: any) => (
+            {Array.isArray(habits) && habits.map((habit: any) => (
               <div key={habit.id} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                 <div className="flex justify-between mb-2">
                   <div>
@@ -188,7 +190,7 @@ export default function Analytics() {
               </div>
             ))}
             
-            {(!habits || habits.length === 0) && (
+            {(!Array.isArray(habits) || habits.length === 0) && (
               <div className="text-center py-8 text-gray-500">
                 No habit data available yet. Start tracking habits to see analytics.
               </div>
