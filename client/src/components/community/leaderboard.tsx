@@ -47,41 +47,31 @@ export function Leaderboard() {
   const [leaderboardType, setLeaderboardType] = useState<"points" | "streak">("points");
   const [timeFrame, setTimeFrame] = useState<"week" | "month" | "all">("week");
 
-  // Mock API call for leaderboard data
-  const { data: leaderboardData, isLoading } = useQuery({
+  // Real API call for leaderboard data
+  const { data: leaderboardData, isLoading } = useQuery<LeaderboardUser[]>({
     queryKey: ["/api/leaderboard", leaderboardType, timeFrame],
-    queryFn: async () => {
-      // For now, generate mock data
-      // In a real implementation, this would come from the server
-      const mockUsers = Array.from({ length: 20 }, (_, i) => {
-        const isCurrentUser = i === 2; // Make a random user the current user for demo
-        return {
-          id: i + 1,
-          name: isCurrentUser && user ? user.name : `User ${i + 1}`,
-          username: isCurrentUser && user ? user.username : `user${i + 1}`,
-          points: Math.floor(Math.random() * 1000) + 100,
-          streak: Math.floor(Math.random() * 30) + 1,
-          rank: i + 1,
-          isCurrentUser: isCurrentUser
-        };
-      });
+    queryFn: async ({ queryKey }) => {
+      const [_, type, timeFrame] = queryKey as [string, string, string];
+      const response = await fetch(`/api/leaderboard?type=${type}&timeFrame=${timeFrame}`);
       
-      // Sort based on the selected leaderboard type
-      const sortedUsers = mockUsers.sort((a, b) => {
-        return leaderboardType === "points" 
-          ? b.points - a.points 
-          : b.streak - a.streak;
-      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch leaderboard data');
+      }
       
-      // Update ranks
-      sortedUsers.forEach((user, index) => {
-        user.rank = index + 1;
-      });
-
-      return sortedUsers;
+      return response.json();
     },
     enabled: !!user,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    // If data isn't available yet, return an empty array to prevent errors
+    placeholderData: [],
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to load leaderboard data. Please try again later.",
+        variant: "destructive"
+      });
+      console.error('Leaderboard error:', error);
+    }
   });
 
   function getRankIcon(rank: number) {

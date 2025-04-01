@@ -14,6 +14,7 @@ export interface IStorage {
   // User methods
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getAllUsers(): Promise<User[]>;
   createUser(user: InsertUser): Promise<User>;
   updateUserStreak(userId: number, streak: number): Promise<User>;
   updateUserPoints(userId: number, points: number): Promise<User>;
@@ -142,6 +143,10 @@ export class MemStorage implements IStorage {
     return Array.from(this.users.values()).find(
       (user) => user.username === username,
     );
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.users.values());
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
@@ -318,8 +323,21 @@ export class MemStorage implements IStorage {
         longestStreak: newLongestStreak
       });
       
+      // Get the user's current data
+      const user = await this.getUser(userId);
+      if (!user) throw new Error(`User with id ${userId} not found`);
+      
+      // Determine if we need to update the user's streak
+      // Only update if the new habit streak is higher than their current streak
+      if (newStreak > user.currentStreak) {
+        await this.updateUserStreak(userId, newStreak);
+      }
+      
       // Add points to user
-      await this.updateUserPoints(userId, 10);
+      // Award more points for longer streaks
+      const streakBonus = Math.min(10, Math.floor(newStreak / 5)); // Bonus increases every 5 days of streak
+      const pointsToAdd = 10 + streakBonus;
+      await this.updateUserPoints(userId, pointsToAdd);
       
       // Check for achievements
       await this.checkAndUnlockAchievements(userId);

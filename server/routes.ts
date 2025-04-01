@@ -11,16 +11,44 @@ import { format } from "date-fns";
 import { setupAuth } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Initialize default user if none exists
+  // Initialize default users if none exist
   const defaultUser = await storage.getUserByUsername("demo");
   if (!defaultUser) {
+    // Create a few users to populate the leaderboard
     await storage.createUser({
       username: "demo",
       password: "demo123", // This will be hashed by the auth system when registered properly
       name: "Alex Johnson",
       email: "alex@example.com",
-      points: 0,
-      currentStreak: 0
+      points: 450,
+      currentStreak: 7
+    });
+    
+    await storage.createUser({
+      username: "sarah",
+      password: "sarah123",
+      name: "Sarah Miller",
+      email: "sarah@example.com",
+      points: 680,
+      currentStreak: 12
+    });
+    
+    await storage.createUser({
+      username: "mike",
+      password: "mike123",
+      name: "Mike Davis",
+      email: "mike@example.com",
+      points: 320,
+      currentStreak: 5
+    });
+    
+    await storage.createUser({
+      username: "emma",
+      password: "emma123",
+      name: "Emma Wilson",
+      email: "emma@example.com",
+      points: 520,
+      currentStreak: 9
     });
   }
 
@@ -407,6 +435,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
 
+
+  // Leaderboard route
+  app.get('/api/leaderboard', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const { type = 'points', timeFrame = 'week' } = req.query;
+      
+      // Get all users with their respective points and streaks
+      const allUsers = await storage.getAllUsers();
+      
+      if (!allUsers || allUsers.length === 0) {
+        return res.json([]);
+      }
+      
+      // Map users to leaderboard format and sort based on the requested type
+      const leaderboardData = allUsers.map(user => {
+        const { password, ...userWithoutPassword } = user;
+        return {
+          id: user.id,
+          name: user.name,
+          username: user.username,
+          points: user.points,
+          streak: user.currentStreak,
+          isCurrentUser: user.id === req.user?.id
+        };
+      }).sort((a, b) => {
+        if (type === 'points') {
+          return b.points - a.points;
+        } else { // 'streak'
+          return b.streak - a.streak;
+        }
+      });
+      
+      // Add rank based on sorted position
+      leaderboardData.forEach((user, index) => {
+        user.rank = index + 1;
+      });
+      
+      res.json(leaderboardData);
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error);
+      res.status(500).json({ message: "Failed to fetch leaderboard data" });
+    }
+  });
 
   // Default quotes
   app.get('/api/quotes', async (req: Request, res: Response) => {
