@@ -80,7 +80,7 @@ export function setupAuth(app: Express) {
     }
   });
 
-  app.post("/api/auth/register", async (req: Request, res: Response, next: NextFunction) => {
+  app.post("/api/register", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { username, password, name, email } = req.body;
 
@@ -115,7 +115,7 @@ export function setupAuth(app: Express) {
     }
   });
 
-  app.post("/api/auth/login", (req: Request, res: Response, next: NextFunction) => {
+  app.post("/api/login", (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("local", (err: Error, user: User, info: any) => {
       if (err) return next(err);
       if (!user) {
@@ -132,7 +132,7 @@ export function setupAuth(app: Express) {
     })(req, res, next);
   });
 
-  app.post("/api/auth/logout", (req: Request, res: Response) => {
+  app.post("/api/logout", (req: Request, res: Response) => {
     req.logout((err) => {
       if (err) {
         return res.status(500).json({ message: "Error logging out" });
@@ -141,15 +141,7 @@ export function setupAuth(app: Express) {
     });
   });
 
-  app.get("/api/users/me", (req: Request, res: Response) => {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
-
-    // Remove password from response
-    const { password, ...userWithoutPassword } = req.user as User;
-    res.json(userWithoutPassword);
-  });
+  // User profile endpoint is defined in routes.ts
 
   // Middleware to check if user is authenticated
   function isAuthenticated(req: Request, res: Response, next: NextFunction) {

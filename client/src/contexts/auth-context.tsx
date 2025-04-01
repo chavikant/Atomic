@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Login mutation
   const { mutateAsync: loginMutation } = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
-      return apiRequest("POST", "/api/auth/login", credentials);
+      return apiRequest("POST", "/api/login", credentials);
     },
     onSuccess: async (res) => {
       const userData = await res.json();
@@ -97,20 +97,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       name: string;
       email: string;
     }) => {
-      return apiRequest("POST", "/api/auth/register", userData);
+      return apiRequest("POST", "/api/register", userData);
     },
   });
 
   // Logout mutation
   const { mutateAsync: logoutMutation } = useMutation({
     mutationFn: async () => {
-      return apiRequest("POST", "/api/auth/logout", {});
+      return apiRequest("POST", "/api/logout", {});
     },
     onSuccess: () => {
       setUser(null);
       setIsAuthenticated(false);
       queryClient.invalidateQueries();
-      setLocation("/login");
+      setLocation("/auth");
     },
   });
 
@@ -146,7 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Registration successful",
         description: "Your account has been created. You can now log in.",
       });
-      setLocation("/login");
+      setLocation("/auth");
     } catch (error: any) {
       toast({
         title: "Registration failed",
