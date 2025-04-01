@@ -26,14 +26,42 @@ function Router() {
       <Route path="/">
         <ProtectedRoute>
           <MainLayout>
-            <Switch>
-              <Route path="/" component={Dashboard} />
-              <Route path="/habits" component={Habits} />
-              <Route path="/analytics" component={Analytics} />
-              <Route path="/community" component={Community} />
-              <Route path="/settings" component={Settings} />
-              <Route component={NotFound} />
-            </Switch>
+            <Dashboard />
+          </MainLayout>
+        </ProtectedRoute>
+      </Route>
+      <Route path="/habits">
+        <ProtectedRoute>
+          <MainLayout>
+            <Habits />
+          </MainLayout>
+        </ProtectedRoute>
+      </Route>
+      <Route path="/analytics">
+        <ProtectedRoute>
+          <MainLayout>
+            <Analytics />
+          </MainLayout>
+        </ProtectedRoute>
+      </Route>
+      <Route path="/community">
+        <ProtectedRoute>
+          <MainLayout>
+            <Community />
+          </MainLayout>
+        </ProtectedRoute>
+      </Route>
+      <Route path="/settings">
+        <ProtectedRoute>
+          <MainLayout>
+            <Settings />
+          </MainLayout>
+        </ProtectedRoute>
+      </Route>
+      <Route>
+        <ProtectedRoute>
+          <MainLayout>
+            <NotFound />
           </MainLayout>
         </ProtectedRoute>
       </Route>
