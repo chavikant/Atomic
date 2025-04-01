@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Fetch the current user on mount
   const { isLoading, refetch } = useQuery({
-    queryKey: ['/api/users/me'],
+    queryKey: ['/api/user'],
     queryFn: async ({ queryKey }) => {
       try {
         const response = await fetch(queryKey[0] as string, {
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = await res.json();
       setUser(userData);
       setIsAuthenticated(true);
-      queryClient.invalidateQueries({ queryKey: ['/api/users/me'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/user'] });
       queryClient.invalidateQueries({ queryKey: ['/api/habits'] });
       queryClient.invalidateQueries({ queryKey: ['/api/habits/today'] });
       queryClient.invalidateQueries({ queryKey: ['/api/achievements'] });

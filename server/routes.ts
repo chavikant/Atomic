@@ -27,7 +27,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
   const { isAuthenticated } = setupAuth(app);
 
-  // User routes
+  // User routes - support both /api/user and /api/users/me for backwards compatibility
+  app.get('/api/user', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      // Don't send password in response
+      const { password, ...userWithoutPassword } = req.user;
+      res.json(userWithoutPassword);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user data" });
+    }
+  });
+  
   app.get('/api/users/me', isAuthenticated, async (req: Request, res: Response) => {
     try {
       if (!req.user) {
@@ -104,6 +118,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(habitsWithProgress);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch today's habits" });
+    }
+  });
+
+  // Upcoming habits (for next few days) - needs to be before /:id to avoid parameter matching
+  app.get('/api/habits/upcoming', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const userId = req.user.id;
+      const habits = await storage.getHabits(userId);
+      
+      if (!habits || habits.length === 0) {
+        return res.json([]); // Return empty array if no habits found
+      }
+      
+      const upcomingDays = 5; // Next 5 days
+      const upcoming = [];
+      
+      const today = new Date();
+      for (let i = 1; i <= upcomingDays; i++) {
+        const date = new Date();
+        date.setDate(today.getDate() + i);
+        
+        // Get habits for this date (will be all habits in our simplified model)
+        const dayHabits = habits.filter(habit => habit.isActive);
+        
+        if (dayHabits.length > 0) {
+          upcoming.push({
+            date: date.toISOString(), // Format as ISO string for frontend
+            habits: dayHabits.map(habit => ({
+              id: habit.id,
+              name: habit.name,
+              description: habit.description,
+              timeOfDay: habit.timeOfDay
+            }))
+          });
+        }
+      }
+      
+      res.json(upcoming);
+    } catch (error) {
+      console.error('Error fetching upcoming habits:', error);
+      res.status(500).json({ message: "Failed to fetch upcoming habits" });
     }
   });
 
@@ -347,50 +406,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Upcoming habits (for next few days)
-  app.get('/api/habits/upcoming', isAuthenticated, async (req: Request, res: Response) => {
-    try {
-      if (!req.user) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
-      
-      const userId = req.user.id;
-      const habits = await storage.getHabits(userId);
-      
-      if (!habits || habits.length === 0) {
-        return res.json([]); // Return empty array if no habits found
-      }
-      
-      const upcomingDays = 5; // Next 5 days
-      const upcoming = [];
-      
-      const today = new Date();
-      for (let i = 1; i <= upcomingDays; i++) {
-        const date = new Date();
-        date.setDate(today.getDate() + i);
-        
-        // Get habits for this date (will be all habits in our simplified model)
-        const dayHabits = habits.filter(habit => habit.isActive);
-        
-        if (dayHabits.length > 0) {
-          upcoming.push({
-            date,
-            habits: dayHabits.map(habit => ({
-              id: habit.id,
-              name: habit.name,
-              description: habit.description,
-              timeOfDay: habit.timeOfDay
-            }))
-          });
-        }
-      }
-      
-      res.json(upcoming);
-    } catch (error) {
-      console.error('Error fetching upcoming habits:', error);
-      res.status(500).json({ message: "Failed to fetch upcoming habits" });
-    }
-  });
+
 
   // Default quotes
   app.get('/api/quotes', async (req: Request, res: Response) => {
