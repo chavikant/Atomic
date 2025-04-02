@@ -1,0 +1,89 @@
+Skip to content
+Navigation Menu
+chavikant
+Atomic
+
+Type / to search
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+CI
+Set up project infrastructure and GitHub workflows. #1
+Jobs
+Run details
+Annotations
+11 errors
+build (18.x)
+failed 1 minute ago in 23s
+Search logs
+0s
+1s
+2s
+10s
+9s
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/components/habits/habit-form.tsx(346,26): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "reward"; ref: RefCallBack; placeholder: string; }' is not assignable to type 'TextareaProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/contexts/theme-context.tsx(60,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/contexts/theme-context.tsx(65,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/contexts/theme-context.tsx(70,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/contexts/theme-context.tsx(75,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/pages/dashboard.tsx(63,23): error TS2339: Property 'name' does not exist on type '{}'.
+Error: client/src/pages/dashboard.tsx(64,25): error TS2339: Property 'currentStreak' does not exist on type '{}'.
+Error: client/src/pages/dashboard.tsx(74,42): error TS2339: Property 'length' does not exist on type '{}'.
+Error: client/src/pages/dashboard.tsx(76,28): error TS2339: Property 'map' does not exist on type '{}'.
+Error: client/src/pages/habits.tsx(18,34): error TS2339: Property 'filter' does not exist on type '{}'.
+Error: server/auth.ts(18,15): error TS2310: Type 'User' recursively references itself as a base type.
+Error: server/auth.ts(71,21): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(66,15): error TS2339: Property 'password' does not exist on type 'User'.
+Error: server/routes.ts(80,15): error TS2339: Property 'password' does not exist on type 'User'.
+Error: server/routes.ts(94,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(113,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(127,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(159,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(203,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(228,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(254,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(286,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(321,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(356,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(371,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(464,48): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(476,14): error TS2339: Property 'rank' does not exist on type '{ id: number; name: string; username: string; points: number; streak: number; isCurrentUser: boolean; }'.
+Error: server/storage.ts(185,11): error TS2322: Type '{ id: number; currentStreak: number; longestStreak: number; createdAt: Date; isActive: true; name: string; target: number; userId: number; unit: string; frequency: string; color?: string | null | undefined; ... 5 more ...; reward?: string | ... 1 more ... | undefined; }' is not assignable to type '{ id: number; color: string | null; name: string; target: number; description: string | null; currentStreak: number; userId: number; unit: string; frequency: string; timeOfDay: string | null; ... 6 more ...; isActive: boolean; }'.
+  Types of property 'color' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.
+Error: server/storage.ts(237,11): error TS2322: Type '{ id: number; date: string; userId: number; habitId: number; progress?: number | undefined; completed?: boolean | undefined; }' is not assignable to type '{ progress: number; id: number; date: string; userId: number; habitId: number; completed: boolean; }'.
+  Types of property 'progress' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+Error: server/storage.ts(238,44): error TS2551: Property 'toISOString' does not exist on type 'string'. Did you mean 'toString'?
+Error: server/storage.ts(267,58): error TS2551: Property 'toISOString' does not exist on type 'string'. Did you mean 'toString'?
+Error: server/storage.ts(292,9): error TS2322: Type 'Date' is not assignable to type 'string'.
+Error: server/storage.ts(352,11): error TS2322: Type '{ id: number; name: string; description: string; icon: string; requiredStreak?: number | null | undefined; requiredHabits?: number | null | undefined; requiredPoints?: number | null | undefined; }' is not assignable to type '{ id: number; name: string; description: string; icon: string; requiredStreak: number | null; requiredHabits: number | null; requiredPoints: number | null; }'.
+  Types of property 'requiredStreak' are incompatible.
+    Type 'number | null | undefined' is not assignable to type 'number | null'.
+      Type 'undefined' is not assignable to type 'number | null'.
+Error: server/storage.ts(414,18): error TS2551: Property 'toISOString' does not exist on type 'string'. Did you mean 'toString'?
+Error: server/vite.ts(42,5): error TS2322: Type '{ middlewareMode: boolean; hmr: { server: Server<typeof IncomingMessage, typeof ServerResponse>; }; allowedHosts: boolean; }' is not assignable to type 'ServerOptions'.
+  Types of property 'allowedHosts' are incompatible.
+    Type 'boolean' is not assignable to type 'true | string[] | undefined'.
+Error: Process completed with exit code 2.
+0s
+0s
+0s
+0s
+0s
+0s
+Set up project infrastructure and GitHub workflows. · chavikant/Atomic@8d9d5a5

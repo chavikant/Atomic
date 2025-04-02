@@ -59,6 +59,12 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
     defaultValues: editingHabit ? {
       ...editingHabit,
       userId: 1, // For demo, always use user ID 1
+      // Ensure string fields aren't null/undefined
+      description: editingHabit.description || "",
+      cue: editingHabit.cue || "",
+      craving: editingHabit.craving || "",
+      response: editingHabit.response || "",
+      reward: editingHabit.reward || "",
     } : {
       name: "",
       description: "",

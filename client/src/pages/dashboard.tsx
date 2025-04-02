@@ -15,11 +15,18 @@ export default function Dashboard() {
   const [habitFormOpen, setHabitFormOpen] = useState(false);
   const [editingHabit, setEditingHabit] = useState<any>(null);
   
-  const { data: user } = useQuery({
-    queryKey: ['/api/users/me'],
+  const { data: user = {
+    name: "User",
+    currentStreak: 0,
+  } } = useQuery<{
+    name: string;
+    currentStreak: number;
+    [key: string]: any;
+  }>({
+    queryKey: ['/api/user'],
   });
   
-  const { data: todayHabits, isLoading } = useQuery({
+  const { data: todayHabits = [], isLoading } = useQuery<any[]>({
     queryKey: ['/api/habits/today'],
   });
 

@@ -11,11 +11,11 @@ export default function Habits() {
   const [editingHabit, setEditingHabit] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
   
-  const { data: habits, isLoading } = useQuery({
+  const { data: habits = [], isLoading } = useQuery<any[]>({
     queryKey: ['/api/habits'],
   });
   
-  const filteredHabits = habits?.filter((habit: any) => 
+  const filteredHabits = habits.filter((habit: any) => 
     habit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (habit.description && habit.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );

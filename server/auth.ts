@@ -15,7 +15,16 @@ const sessionStore = new MemoryStore({
 
 declare global {
   namespace Express {
-    interface User extends User {}
+    // Define the User interface for Passport
+    interface User {
+      id: number;
+      username: string;
+      name: string;
+      email: string;
+      password: string;
+      points: number;
+      currentStreak: number;
+    }
   }
 }
 

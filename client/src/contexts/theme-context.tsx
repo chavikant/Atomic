@@ -57,22 +57,22 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Function to set theme mode
   const setMode = (mode: ThemeMode) => {
-    setTheme(prev => ({ ...prev, mode }));
+    setTheme((prev: typeof defaultTheme) => ({ ...prev, mode }));
   };
 
   // Function to set theme color
   const setColor = (color: ThemeColor) => {
-    setTheme(prev => ({ ...prev, color }));
+    setTheme((prev: typeof defaultTheme) => ({ ...prev, color }));
   };
 
   // Function to toggle reduce animations
   const setReduceAnimations = (reduceAnimations: boolean) => {
-    setTheme(prev => ({ ...prev, reduceAnimations }));
+    setTheme((prev: typeof defaultTheme) => ({ ...prev, reduceAnimations }));
   };
 
   // Function to toggle compact mode
   const setCompactMode = (compactMode: boolean) => {
-    setTheme(prev => ({ ...prev, compactMode }));
+    setTheme((prev: typeof defaultTheme) => ({ ...prev, compactMode }));
   };
 
   // Function to reset to default theme
