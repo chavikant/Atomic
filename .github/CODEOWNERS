@@ -1,0 +1,22 @@
+# CODEOWNERS file
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @yourusername
+
+# Owners for specific directories
+/server/ @yourusername
+/client/ @yourusername
+/shared/ @yourusername
+/.github/ @yourusername
+
+# Owners for specific file types
+*.ts @yourusername
+*.tsx @yourusername
+*.js @yourusername
+*.jsx @yourusername
+*.json @yourusername
+*.md @yourusername
+
+# Documentation owners
+/docs/ @yourusername
