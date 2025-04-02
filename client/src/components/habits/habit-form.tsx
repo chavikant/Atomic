@@ -53,32 +53,54 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
+  // Create a helper function to process field values
+  const processFieldValue = (value: any): string => {
+    if (value === null || value === undefined) {
+      return "";
+    }
+    return String(value);
+  };
+
+  // Get default values while ensuring no null/undefined
+  const getDefaultValues = () => {
+    if (editingHabit) {
+      return {
+        ...editingHabit,
+        userId: 1, // For demo, always use user ID 1
+        // Ensure string fields aren't null/undefined
+        name: processFieldValue(editingHabit.name),
+        description: processFieldValue(editingHabit.description),
+        unit: processFieldValue(editingHabit.unit),
+        frequency: processFieldValue(editingHabit.frequency),
+        timeOfDay: processFieldValue(editingHabit.timeOfDay),
+        color: processFieldValue(editingHabit.color || "#4F46E5"),
+        cue: processFieldValue(editingHabit.cue),
+        craving: processFieldValue(editingHabit.craving),
+        response: processFieldValue(editingHabit.response),
+        reward: processFieldValue(editingHabit.reward),
+      };
+    } else {
+      return {
+        name: "",
+        description: "",
+        target: 1,
+        unit: "minutes",
+        frequency: "daily",
+        timeOfDay: "08:00",
+        userId: 1, // For demo, always use user ID 1
+        color: "#4F46E5",
+        cue: "",
+        craving: "",
+        response: "",
+        reward: "",
+      };
+    }
+  };
+
   // Initialize form with default values or editing values
   const form = useForm<HabitFormValues>({
     resolver: zodResolver(habitFormSchema),
-    defaultValues: editingHabit ? {
-      ...editingHabit,
-      userId: 1, // For demo, always use user ID 1
-      // Ensure string fields aren't null/undefined
-      description: editingHabit.description || "",
-      cue: editingHabit.cue || "",
-      craving: editingHabit.craving || "",
-      response: editingHabit.response || "",
-      reward: editingHabit.reward || "",
-    } : {
-      name: "",
-      description: "",
-      target: 1,
-      unit: "minutes",
-      frequency: "daily",
-      timeOfDay: "08:00",
-      userId: 1, // For demo, always use user ID 1
-      color: "#4F46E5",
-      cue: "",
-      craving: "",
-      response: "",
-      reward: "",
-    }
+    defaultValues: getDefaultValues()
   });
 
   const { mutate: saveHabit, isPending } = useMutation({
@@ -165,7 +187,8 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
                       <FormControl>
                         <Textarea 
                           placeholder="e.g. Daily reading habit" 
-                          {...field} 
+                          {...field}
+                          value={field.value ?? ""} 
                         />
                       </FormControl>
                       <FormMessage />
@@ -255,7 +278,11 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
                       <FormItem>
                         <FormLabel>Preferred Time</FormLabel>
                         <FormControl>
-                          <Input type="time" {...field} />
+                          <Input 
+                            type="time" 
+                            {...field}
+                            value={field.value ?? ""} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -273,7 +300,8 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
                         <Input 
                           type="color" 
                           className="w-12 h-10 p-1" 
-                          {...field} 
+                          {...field}
+                          value={field.value ?? "#4F46E5"} 
                         />
                         <span className="text-sm">{field.value}</span>
                       </div>
@@ -300,7 +328,8 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
                       <FormControl>
                         <Textarea 
                           placeholder="What triggers this habit? e.g. After brushing teeth" 
-                          {...field} 
+                          {...field}
+                          value={field.value ?? ""} 
                         />
                       </FormControl>
                       <FormMessage />
@@ -317,7 +346,8 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
                       <FormControl>
                         <Textarea 
                           placeholder="Why are you motivated to do this? e.g. Want to learn new things" 
-                          {...field} 
+                          {...field}
+                          value={field.value ?? ""} 
                         />
                       </FormControl>
                       <FormMessage />
@@ -334,7 +364,8 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
                       <FormControl>
                         <Textarea 
                           placeholder="The specific action you'll take. e.g. Read 20 pages of a book" 
-                          {...field} 
+                          {...field}
+                          value={field.value ?? ""} 
                         />
                       </FormControl>
                       <FormMessage />
@@ -351,7 +382,8 @@ export function HabitForm({ open, onClose, editingHabit }: HabitFormProps) {
                       <FormControl>
                         <Textarea 
                           placeholder="What reward will you get? e.g. Knowledge, relaxation" 
-                          {...field} 
+                          {...field}
+                          value={field.value ?? ""} 
                         />
                       </FormControl>
                       <FormMessage />

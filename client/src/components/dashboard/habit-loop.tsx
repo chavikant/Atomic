@@ -3,14 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Book, Zap } from 'lucide-react';
 
 export function HabitLoop() {
-  const { data: habits } = useQuery({
+  const { data: habits = [] } = useQuery<any[]>({
     queryKey: ['/api/habits'],
   });
 
   // Filter habits that have complete habit loops
-  const habitsWithLoop = habits?.filter(
+  const habitsWithLoop = habits.filter(
     (habit: any) => habit.cue && habit.craving && habit.response && habit.reward
-  ) || [];
+  );
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">

@@ -1,0 +1,102 @@
+x tsc --noEmit
+  npx tsc --noEmit
+  shell: /usr/bin/bash -e {0}
+Error: client/src/components/community/leaderboard.tsx(67,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<LeaderboardUser[], Error, LeaderboardUser[], QueryKey>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'onError' does not exist in type 'DefinedInitialDataOptions<LeaderboardUser[], Error, LeaderboardUser[], QueryKey>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<LeaderboardUser[], Error, LeaderboardUser[], QueryKey>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'onError' does not exist in type 'UndefinedInitialDataOptions<LeaderboardUser[], Error, LeaderboardUser[], QueryKey>'.
+  Overload 3 of 3, '(options: UseQueryOptions<LeaderboardUser[], Error, LeaderboardUser[], QueryKey>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'onError' does not exist in type 'UseQueryOptions<LeaderboardUser[], Error, LeaderboardUser[], QueryKey>'.
+Error: client/src/components/community/leaderboard.tsx(67,15): error TS7006: Parameter 'error' implicitly has an 'any' type.
+Error: client/src/components/community/leaderboard.tsx(98,44): error TS2339: Property 'find' does not exist on type 'NonNullable<TQueryFnData>'.
+Error: client/src/components/community/leaderboard.tsx(98,49): error TS7006: Parameter 'u' implicitly has an 'any' type.
+Error: client/src/components/community/leaderboard.tsx(184,82): error TS2339: Property 'length' does not exist on type 'NonNullable<TQueryFnData>'.
+Error: client/src/components/community/leaderboard.tsx(192,40): error TS2339: Property 'find' does not exist on type 'NonNullable<TQueryFnData>'.
+Error: client/src/components/community/leaderboard.tsx(192,45): error TS7006: Parameter 'u' implicitly has an 'any' type.
+Error: client/src/components/community/leaderboard.tsx(193,40): error TS2339: Property 'find' does not exist on type 'NonNullable<TQueryFnData>'.
+Error: client/src/components/community/leaderboard.tsx(193,45): error TS7006: Parameter 'u' implicitly has an 'any' type.
+Error: client/src/components/community/leaderboard.tsx(213,37): error TS2339: Property 'slice' does not exist on type 'NonNullable<TQueryFnData>'.
+Error: client/src/components/community/leaderboard.tsx(213,55): error TS7006: Parameter 'user' implicitly has an 'any' type.
+Error: client/src/components/dashboard/achievements.tsx(51,24): error TS2339: Property 'map' does not exist on type '{}'.
+Error: client/src/components/dashboard/habit-loop.tsx(11,34): error TS2339: Property 'filter' does not exist on type '{}'.
+Error: client/src/components/dashboard/progress-chart.tsx(91,22): error TS2339: Property 'labels' does not exist on type '{}'.
+Error: client/src/components/dashboard/progress-chart.tsx(92,24): error TS2339: Property 'datasets' does not exist on type '{}'.
+Error: client/src/components/dashboard/upcoming-habits.tsx(64,37): error TS2339: Property 'length' does not exist on type '{}'.
+Error: client/src/components/dashboard/upcoming-habits.tsx(66,25): error TS2339: Property 'map' does not exist on type '{}'.
+Error: client/src/components/dashboard/welcome-card.tsx(54,22): error TS2339: Property 'quote' does not exist on type '{}'.
+Error: client/src/components/dashboard/welcome-card.tsx(57,23): error TS2339: Property 'author' does not exist on type '{}'.
+Error: client/src/components/habits/habit-form.tsx(160,26): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "description"; ref: RefCallBack; placeholder: string; }' is not assignable to type 'TextareaProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/components/habits/habit-form.tsx(252,28): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "timeOfDay"; ref: RefCallBack; type: "time"; }' is not assignable to type 'InputProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/components/habits/habit-form.tsx(267,26): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "color"; ref: RefCallBack; type: "color"; className: string; }' is not assignable to type 'InputProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/components/habits/habit-form.tsx(295,26): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "cue"; ref: RefCallBack; placeholder: string; }' is not assignable to type 'TextareaProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/components/habits/habit-form.tsx(312,26): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "craving"; ref: RefCallBack; placeholder: string; }' is not assignable to type 'TextareaProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/components/habits/habit-form.tsx(329,26): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "response"; ref: RefCallBack; placeholder: string; }' is not assignable to type 'TextareaProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/components/habits/habit-form.tsx(346,26): error TS2322: Type '{ onChange: (...event: any[]) => void; onBlur: Noop; value: string | null | undefined; disabled?: boolean | undefined; name: "reward"; ref: RefCallBack; placeholder: string; }' is not assignable to type 'TextareaProps'.
+  Types of property 'value' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.
+Error: client/src/contexts/theme-context.tsx(60,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/contexts/theme-context.tsx(65,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/contexts/theme-context.tsx(70,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/contexts/theme-context.tsx(75,14): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+Error: client/src/pages/dashboard.tsx(63,23): error TS2339: Property 'name' does not exist on type '{}'.
+Error: client/src/pages/dashboard.tsx(64,25): error TS2339: Property 'currentStreak' does not exist on type '{}'.
+Error: client/src/pages/dashboard.tsx(74,42): error TS2339: Property 'length' does not exist on type '{}'.
+Error: client/src/pages/dashboard.tsx(76,28): error TS2339: Property 'map' does not exist on type '{}'.
+Error: client/src/pages/habits.tsx(18,34): error TS2339: Property 'filter' does not exist on type '{}'.
+Error: server/auth.ts(18,15): error TS2310: Type 'User' recursively references itself as a base type.
+Error: server/auth.ts(71,21): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(66,15): error TS2339: Property 'password' does not exist on type 'User'.
+Error: server/routes.ts(80,15): error TS2339: Property 'password' does not exist on type 'User'.
+Error: server/routes.ts(94,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(113,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(127,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(159,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(203,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(228,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(254,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(286,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(321,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(356,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(371,31): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(464,48): error TS2339: Property 'id' does not exist on type 'User'.
+Error: server/routes.ts(476,14): error TS2339: Property 'rank' does not exist on type '{ id: number; name: string; username: string; points: number; streak: number; isCurrentUser: boolean; }'.
+Error: server/storage.ts(185,11): error TS2322: Type '{ id: number; currentStreak: number; longestStreak: number; createdAt: Date; isActive: true; name: string; target: number; userId: number; unit: string; frequency: string; color?: string | null | undefined; ... 5 more ...; reward?: string | ... 1 more ... | undefined; }' is not assignable to type '{ id: number; color: string | null; name: string; target: number; description: string | null; currentStreak: number; userId: number; unit: string; frequency: string; timeOfDay: string | null; ... 6 more ...; isActive: boolean; }'.
+  Types of property 'color' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.
+Error: server/storage.ts(237,11): error TS2322: Type '{ id: number; date: string; userId: number; habitId: number; progress?: number | undefined; completed?: boolean | undefined; }' is not assignable to type '{ progress: number; id: number; date: string; userId: number; habitId: number; completed: boolean; }'.
+  Types of property 'progress' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+Error: server/storage.ts(238,44): error TS2551: Property 'toISOString' does not exist on type 'string'. Did you mean 'toString'?
+Error: server/storage.ts(267,58): error TS2551: Property 'toISOString' does not exist on type 'string'. Did you mean 'toString'?
+Error: server/storage.ts(292,9): error TS2322: Type 'Date' is not assignable to type 'string'.
+Error: server/storage.ts(352,11): error TS2322: Type '{ id: number; name: string; description: string; icon: string; requiredStreak?: number | null | undefined; requiredHabits?: number | null | undefined; requiredPoints?: number | null | undefined; }' is not assignable to type '{ id: number; name: string; description: string; icon: string; requiredStreak: number | null; requiredHabits: number | null; requiredPoints: number | null; }'.
+  Types of property 'requiredStreak' are incompatible.
+    Type 'number | null | undefined' is not assignable to type 'number | null'.
+      Type 'undefined' is not assignable to type 'number | null'.
+Error: server/storage.ts(414,18): error TS2551: Property 'toISOString' does not exist on type 'string'. Did you mean 'toString'?
+Error: server/vite.ts(42,5): error TS2322: Type '{ middlewareMode: boolean; hmr: { server: Server<typeof IncomingMessage, typeof ServerResponse>; }; allowedHosts: boolean; }' is not assignable to type 'ServerOptions'.
+  Types of property 'allowedHosts' are incompatible.
+    Type 'boolean' is not assignable to type 'true | string[] | undefined'.
+Error: Process completed with exit code 2.

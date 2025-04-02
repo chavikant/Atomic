@@ -8,7 +8,7 @@ interface UpcomingHabitsProps {
 }
 
 export function UpcomingHabits({ onCreateHabit }: UpcomingHabitsProps) {
-  const { data: upcomingData, isLoading } = useQuery({
+  const { data: upcomingData = [], isLoading } = useQuery<any[]>({
     queryKey: ['/api/habits/upcoming'],
   });
 

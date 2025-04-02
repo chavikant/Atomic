@@ -19,7 +19,7 @@ const achievementIcons: Record<string, any> = {
 };
 
 export function Achievements() {
-  const { data: achievements, isLoading } = useQuery({
+  const { data: achievements = [], isLoading } = useQuery<any[]>({
     queryKey: ['/api/achievements'],
   });
 

@@ -34,7 +34,10 @@ export function ProgressChart() {
   const chartInstanceRef = useRef<Chart | null>(null);
 
   // Fetch chart data
-  const { data, isLoading } = useQuery({
+  const { data = { labels: [], datasets: [] }, isLoading } = useQuery<{
+    labels: string[];
+    datasets: any[];
+  }>({
     queryKey: ['/api/analytics/weekly'],
   });
 

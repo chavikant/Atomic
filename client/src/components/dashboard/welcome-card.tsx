@@ -11,7 +11,10 @@ export function WelcomeCard({ name, streak }: WelcomeCardProps) {
   const [greeting, setGreeting] = useState("Good day");
   const [currentDate, setCurrentDate] = useState("");
 
-  const { data: quote } = useQuery({
+  const { data: quote = { quote: "", author: "" } } = useQuery<{
+    quote: string;
+    author: string;
+  }>({
     queryKey: ['/api/quotes'],
     staleTime: 24 * 60 * 60 * 1000 // 24 hours
   });
